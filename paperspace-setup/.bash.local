@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+alias mambai='mamba install -p ~/.conda '
+alias pipi='pip install --user '
+
+export PATH=~/.local/bin:~/.conda/bin/:$PATH
