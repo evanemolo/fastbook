@@ -571,3 +571,15 @@ Normalizing the data - in the titanic case, dividing by the max to get a nuymber
     - `y = mx + b` b is the constant term. the trick for ML is a new col of just 1s!!!
 
 Next lesson..."Getting started with NLP for absolute beginners" kaggle notebook. Read before next
+
+## Chapter 3 - Data Ethics
+
+> There is no such thing as a completely debiased dataset.
+
+> Machine learning can create feedback loops:: Small amounts of bias can rapidly increase exponentially due to feedback loops.
+
+> One proposed approach is to develop some form of digital signature, to implement it in a seamless way, and to create norms that we should only trust content that has been verified.
+
+https://hbr.org/2019/03/how-will-we-prevent-ai-based-forgery
+
+> Clean air and clean drinking water are public goods which are nearly impossible to protect through individual market decisions, but rather require coordinated regulatory action. Similarly, many of the harms resulting from unintended consequences of misuses of technology involve public goods, such as a polluted information environment or deteriorated ambient privacy. Too often privacy is framed as an individual right, yet there are societal impacts to widespread surveillance (which would still be the case even if it was possible for a few individuals to opt out).
