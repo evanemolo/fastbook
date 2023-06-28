@@ -8,3 +8,4 @@ scikit_learn
 azure-cognitiveservices-search-imagesearch
 sentencepiece
 fastbook
+python-dotenv

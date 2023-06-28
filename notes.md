@@ -583,3 +583,50 @@ Next lesson..."Getting started with NLP for absolute beginners" kaggle notebook.
 https://hbr.org/2019/03/how-will-we-prevent-ai-based-forgery
 
 > Clean air and clean drinking water are public goods which are nearly impossible to protect through individual market decisions, but rather require coordinated regulatory action. Similarly, many of the harms resulting from unintended consequences of misuses of technology involve public goods, such as a polluted information environment or deteriorated ambient privacy. Too often privacy is framed as an individual right, yet there are societal impacts to widespread surveillance (which would still be the case even if it was possible for a few individuals to opt out).
+
+## Lesson 4 
+
+Pretrained model has already set the right "fit", then all you have to do is fine tune.
+
+NLP used often for classification of documents.
+    - sentiment analysis
+    - triaging inbound
+    - etc...
+    
+Python and bash code can be combined...
+    - `!ls {path}` — `path` being a Python variable in this case.
+ 
+
+Libraries for data science:
+    - numpy
+    - matplotlib
+    - pandas
+    - pytorch
+    
+[Python for DataScience book](https://wesmckinney.com/book/)
+
+[Hugging Face model hub](huggingface.co/models) has ~44k models that can be used.
+    - `deberta-v3-small` is a good model for NLP prototyping
+
+tokenization (splitting up document into words) -> numericalization (creating unique ids for the tokens)
+
+ULMFit vs transformers — ULMfit tends to work better for 20,000 word or larger documents.
+
+underfitting vs overfitting
+    underfitting is easy to recognize
+    not so with overfitting
+    
+Kaggle comps are good for testing your ability to create a good validation set
+
+In the real world you will not know if you overfit!
+
+Randomization doesn't necessarily create a good validation set
+
+training set - validation set - test set
+
+https://www.fast.ai/posts/2019-09-24-metrics.html
+
+Peasson Correletaion Coeffictient
+    - typically assigned `r`
+    - scale -1 to +1
+    
