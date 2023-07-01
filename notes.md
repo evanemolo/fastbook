@@ -31,6 +31,40 @@ See if you get a response to [this](https://forums.fast.ai/t/run-fast-ai-on-pape
   - try the bird exercise, maybe introduce more categories.
 - read chapter 1.
 
+## Chapter 0
+
+Finish _a_ project. Make it polished. It doesn't have to be something no one else created before.
+
+[Meta Learning: How To Learn Deep Learning And Thrive In The Digital World](https://rosmulski.gumroad.com/l/learn_machine_learning)
+
+### How to do the course
+
+1. watch lecture -> 
+2. run notebook and experiment -> 
+3. reproduce results (with a new notebook, can recreate the code? -> 
+    i.e. rewatch lesson and refer to initial notebook when needed) 
+4. repeat with different dataaset
+
+For 2. and 3. use the "clean" version of the notebook in the clean dir.
+
+Go through the questionnares at the end of each chapter.
+
+The point is turn this into a "participatory exercise" instead of passive watching and reading.
+
+[Fast AI Forums](forums.fast.ai)
+
+Lookup the "share your work here" post for inspiration.
+
+### How _not_ to do the course
+
+Going deep into calculus and mathematical theory, etc. before _doing_ the course learning.
+
+Gatekeeping...
+
+Most of deep learning is matrix multiplication.
+
+Many people are surprised how early on they can get good results with the models they create...it's a good feedback loop to further your understanding.
+
 ## Chapter 1
 
 - [Full chapter 1](https://github.com/fastai/fastbook/blob/master/01_intro.ipynb)
@@ -624,9 +658,13 @@ Randomization doesn't necessarily create a good validation set
 
 training set - validation set - test set
 
-https://www.fast.ai/posts/2019-09-24-metrics.html
+[The problem with metrics is a big problem for AI](https://www.fast.ai/posts/2019-09-24-metrics.html)
 
 Peasson Correletaion Coeffictient
     - typically assigned `r`
     - scale -1 to +1
     
+JupyterLab - convert notebook to py script: `jupyter nbconvert --to python notebook.ipynb`
+
+[Hugging Face transformers](https://huggingface.co/docs/transformers/index)
+
