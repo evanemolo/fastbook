@@ -13,25 +13,9 @@ See if you get a response to [this](https://forums.fast.ai/t/run-fast-ai-on-pape
 - [Github Fast.ai book (another source for clean notebooks, in case something breaks)](https://github.com/fastai/fastbook/blob/master/01_intro.ipynb)
 - [aiquizzes.com](https://aiquizzes.com)
 - [VSCode + Paperspace](https://forums.fast.ai/t/beginner-setup/95289/109?u=evanemolo)
+- [Fast.ai discord — course help](https://discord.com/channels/689892369998676007/999799504121376869)
 
-## [Lesson 1](https://course.fast.ai/Lessons/lesson1.html)
-
-- Fast.ai is a library
-  - sits on top of PyTorch
-- Jupyter Notebooks will run Python in the browser
-  - creates a virtual computer when running code.
-  - `!` usage in the codeblocks indicated a bash command (ie `!pwd`)
-- `DataBlock`
-  - an abstraction for creating a model.
-- docs.fast.ai
-  /tutorials
-- a model: multiply things, add them, negatives are set to 0, repeat.
-- it's important to experiment
-  - Kaggle notebooks
-  - try the bird exercise, maybe introduce more categories.
-- read chapter 1.
-
-## Chapter 0
+## Lesson 0
 
 Finish _a_ project. Make it polished. It doesn't have to be something no one else created before.
 
@@ -52,8 +36,7 @@ Go through the questionnares at the end of each chapter.
 The point is turn this into a "participatory exercise" instead of passive watching and reading.
 
 [Fast AI Forums](forums.fast.ai)
-
-Lookup the "share your work here" post for inspiration.
+    Lookup the "share your work here" post for inspiration.
 
 ### How _not_ to do the course
 
@@ -64,6 +47,33 @@ Gatekeeping...
 Most of deep learning is matrix multiplication.
 
 Many people are surprised how early on they can get good results with the models they create...it's a good feedback loop to further your understanding.
+
+Start with a baseline. Start simple. 
+    i.e. get averages have the model work against the averages
+    
+Join a Kaggle competition! One of the best possible projects — even if you come in last.
+    Join early.
+
+Part 2 of the course gets into the nuts and bolts 
+
+
+
+## [Lesson 1](https://course.fast.ai/Lessons/lesson1.html)
+
+- Fast.ai is a library
+  - sits on top of PyTorch
+- Jupyter Notebooks will run Python in the browser
+  - creates a virtual computer when running code.
+  - `!` usage in the codeblocks indicated a bash command (ie `!pwd`)
+- `DataBlock`
+  - an abstraction for creating a model.
+- docs.fast.ai
+  /tutorials
+- a model: multiply things, add them, negatives are set to 0, repeat.
+- it's important to experiment
+  - Kaggle notebooks
+  - try the bird exercise, maybe introduce more categories.
+- read chapter 1.
 
 ## Chapter 1
 
@@ -668,3 +678,135 @@ JupyterLab - convert notebook to py script: `jupyter nbconvert --to python noteb
 
 [Hugging Face transformers](https://huggingface.co/docs/transformers/index)
 
+## Chapter 4 - MNIST Basics
+
+> stochastic gradient descent (SGD), the mechanism for learning by updating weights automatically
+
+> Baseline: A simple model which you are confident should perform reasonably well.
+
+```python
+stacked_sevens = torch.stack(seven_tensors).float()/255
+stacked_threes = torch.stack(three_tensors).float()/255
+stacked_threes.shape
+# torch.Size([6131, 28, 28])
+```
+> Perhaps the most important attribute of a tensor is its shape. This tells you the length of each axis. In this case, we can see that we have 6,131 images, each of size 28×28 pixels. There is nothing specifically about this tensor that says that the first axis is the number of images, the second is the height, and the third is the width
+
+`len(stacked_threes.shape)` or `stacked_threes.ndim` — length for the tensor is the rank
+
+> It is really important for you to commit to memory and practice these bits of tensor jargon: rank is the number of axes or dimensions in a tensor; shape is the size of each axis of a tensor.
+
+For a baseline with the images of 3s and 7s, the book suggests creating the average value per pixel (in the range of 0 to 255 - white to black) for all dataset. This works because all images are the same width and height.
+
+We can then calculate the difference between the average or "ideal" 3 or 7, with some random sample. The calculation for the difference can use _absolute value_ of differences (aka L1 norm) or _mean of the squares_ of differences (aka L2 norm). This also referred to later in the chapter as the _distance_.
+
+We can then compare the distances between the averaged baseline for the 3 and its L1 or L2 norm, compared to the average baseline for the 7 its L1 or L2 norm. 
+
+mse - mean squared error 
+
+> the difference between L1 norm and mean squared error (MSE) is that the latter will penalize bigger mistakes more heavily than the former (and be more lenient with small mistakes).
+
+> NumPy arrays and PyTorch tensors can finish computations many thousands of times faster than using pure Python.
+
+Numpy and Pytorch use C under the hood where applicable.
+
+A pytorch tensor and Numpy array are both multidimensional arrays and are similar. Tensors must be basic numerical type, however, while numpy arrays can be any type so long as the contents are the same type. The additional restriction from pytorch allows these structures to live on the GPU.
+
+The syntax for Numpy arrays amd Pytorch tensors are identical.
+
+> we want to calculate our metric over a validation set. This is so that we don't inadvertently overfit—that is, train a model to work well only on our training data.
+
+> PyTorch, when it tries to perform a simple subtraction operation between two tensors of different ranks, will use broadcasting.
+
+...
+
+> After broadcasting so the two argument tensors have the same rank, PyTorch applies its usual logic for two tensors of the same rank: it performs the operation on each corresponding element of the two tensors
+
+> CUDA, the equivalent of C on the GPU
+
+While the pixel similarity approach works, it's not "learning" — we don't have weight assignments and thus don't have a way to improve the methodology.
+
+_loss_: testing the effectiveness of any current weight assignment in terms of actual performance.
+
+### Calculating Gradients
+
+Gradient descent is an iterative optimization algorithm used to minimize the loss or error function of a machine learning model. It works by calculating the gradient of the loss function with respect to the model's parameters and adjusting the parameters in the opposite direction of the gradient to find the optimal values.
+
+Calculating the gradient (aka derivative) refers to determining the rate of change (dy/dx) of a function at a particular point. For a function of multiple variables, the gradient represents a vector of partial derivatives. 
+
+[Khan Academy: basic derivatives](https://www.khanacademy.org/math/differential-calculus/dc-diff-intro/dc-basic-diff-rules/v/derivative-properties-and-polynomial-derivatives)
+
+> Calculus provides us with a computational shortcut, the derivative, which lets us directly calculate the gradients of our functions.
+
+Our function has lots of weights that will need to be adjusted, so calculating the derivate will return a gradient for every weight. With that siad, when calculating the derivative for one weight, all the others are treated as constants. 
+
+We don't have to calculate the gradients on our own — Pytorch will do it for us. It can compute the derivative of nearly any function.
+
+`.requires_grad_()`:
+
+> This API might throw you off if you're coming from math or physics. In those contexts the "gradient" of a function is just another function (i.e., its derivative), so you might expect gradient-related APIs to give you a new function. But in deep learning, "gradients" usually means the value of a function's derivative at a particular argument value.
+
+### Stepping with a learning rate
+
+Now we have to change parameters based on the values of the gradients.
+
+Basically all approaches start with multiplying the gradient by a small number, called the _learning rate (LR)_.
+    
+LR is usually between .001 and .1
+
+We use the LR for an _optimizer step_ by _stepping_ the parameter:
+
+> w -= gradient(w) * lr
+
+We are trying to _minimize_ loss — the subtraction allows to use adjust the parameters in the direction of the slope, which will indeed minimize loss.
+
+Too small of an LR means doing a lot of steps. Too large is worse — it can results in the loss becoming worse!
+
+### End to End SGD example
+
+Example: creating a synthetic model for the speed of a rollercoaster as it went over the top of a hump. The model should show how the speed changes over time.
+
+SGD is used to find a function that matches observations (in this example). Assumption is made the function will be quadratic: `a * (time**2) + (b * time) + c`
+
+An SGD function would then look like:
+
+```python
+def sgd(t, params):
+    a,b,c = params
+    return a*(t**2) + (b*t)+ c
+```
+
+Every quadratic is always going to be defined by the three params a, b, c. thus, to find the best quadratic function means finding the best values for a, b, c.
+
+This same idea applies to neural nets.
+
+But what is "best"? We have to define a _loss function_ which will return a value based on a prediction and a target. 
+    - lower values of the function -> "better" predictions
+    - in other words, the loss functions should return lower values when the preductions are more accurate.
+    
+For continuous data, it's common to use _mean squared error (MSE)_
+
+1. init params
+2. calc predictions
+```
+sgd(time, params)
+```
+3. calculate the loss
+```
+loss = mse(preds, speed)
+```
+4. calc gradients (e.g. calc the approximate of how the params need to change)
+5. step the weights (use the LR)
+6. repeat 5. as needed
+
+### Summarizing Gradient Descent
+
+weights of our models can be random (train from scratch) or come from pretrained model (_transfer learning_). 
+
+Either way, more than likely the model needs to _learn_ better weights.
+
+Assuming our data is properly labelled, we compare the outputs the model gives us with the targets using the loss function — a function that returns a number that we want to make as low as possible by improving our weights. 
+
+Finding the change in weights, we use gradients. We use magntitude of the gradient to tell how big a step to take; multiply the gradient by the learning rate to decide the step size. we iterate until we have reached our desired weights.
+
+### the MNIST Loss function
