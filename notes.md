@@ -630,7 +630,9 @@ https://hbr.org/2019/03/how-will-we-prevent-ai-based-forgery
 
 ## Lesson 4 
 
-Pretrained model has already set the right "fit", then all you have to do is fine tune.
+This lesson goes through the _Getting Started with NLP for Absolute Beginners_ notebook.
+
+Pretrained model has already set the right "fit", then all you have to do is fine tune. In the context of the sliders example from the previous lesson, it's like saying some some of them have already been figured out and need no adjustment, while others need some tweaks, and others need much adjustment.
 
 NLP used often for classification of documents.
     - sentiment analysis
@@ -640,25 +642,29 @@ NLP used often for classification of documents.
 Python and bash code can be combined...
     - `!ls {path}` — `path` being a Python variable in this case.
  
-
 Libraries for data science:
     - numpy
     - matplotlib
     - pandas
     - pytorch
     
-[Python for DataScience book](https://wesmckinney.com/book/)
+[O'reilly — Python for Data Analysis book](https://wesmckinney.com/book/)
 
-[Hugging Face model hub](huggingface.co/models) has ~44k models that can be used.
+[Hugging Face model hub](huggingface.co/models) has ~44k pretrained models that can be used.
     - `deberta-v3-small` is a good model for NLP prototyping
 
 tokenization (splitting up document into words) -> numericalization (creating unique ids for the tokens)
 
-ULMFit vs transformers — ULMfit tends to work better for 20,000 word or larger documents.
+ULMFit vs transformers — ULMfit tends to work better for 2,000 word or larger documents. Transformers do worse with them.
 
-underfitting vs overfitting
-    underfitting is easy to recognize
-    not so with overfitting
+sentiment analysis is a classification problem (is the document positive or negative?)
+
+For starting with NLP, classification problems are a great start.
+
+A typical situation in ML is taking a seemingly novel problem and turning it into a type problem we have seen before. In the context of the patent data, we are turning the problem of _are the contents of abatement and target similar, different, or identical_. so it is now a classification problem.
+
+underfitting vs overfitting:
+    - when visualized underfitting is easy to recognize. not so with overfitting.
     
 Kaggle comps are good for testing your ability to create a good validation set
 
@@ -666,17 +672,32 @@ In the real world you will not know if you overfit!
 
 Randomization doesn't necessarily create a good validation set
 
-training set - validation set - test set
+training set -> validation set -> test set
+
+[How and Why to create a good validation set](https://www.fast.ai/posts/2017-11-13-validation-sets.html#:~:text=The%20underlying%20idea%20is%20that,trees%20or%2050%20trees%3F))
+
+Most beginners overfit. Doing Kaggle comps are a great way for catching yourself with overfitting.
+
+Kaggle - looking into "cross validation"
+
+Jeremy gives a great explanation of the flexibility of neural nets [here](https://youtu.be/toUgBQv1BT8?t=2538)
 
 [The problem with metrics is a big problem for AI](https://www.fast.ai/posts/2019-09-24-metrics.html)
 
-Peasson Correletaion Coeffictient
-    - typically assigned `r`
-    - scale -1 to +1
+Patent competition uses the Pearson Correlation Coefficient as its metric.
+    - Pearson typically assigned to `r` variable.
+    - represented as a number between -1 to +1
+    - measures the degree of relationship between two variables.
     
+If you're dealing with a huge amount of data while prototyping, sample it as a smaller size.
+
 JupyterLab - convert notebook to py script: `jupyter nbconvert --to python notebook.ipynb`
 
 [Hugging Face transformers](https://huggingface.co/docs/transformers/index)
+
+Always investigate outliers. Why do they exist?
+
+NLP is the most recent area of affective ML.
 
 ## Chapter 4 - MNIST Basics
 
@@ -810,3 +831,54 @@ Assuming our data is properly labelled, we compare the outputs the model gives u
 Finding the change in weights, we use gradients. We use magntitude of the gradient to tell how big a step to take; multiply the gradient by the learning rate to decide the step size. we iterate until we have reached our desired weights.
 
 ### the MNIST Loss function
+
+**review this section again**
+
+`y = mx + b` — slope of a line. In ML, `m` is the _weights_ and `b` is the _bias_
+
+Python loops are slow and don't run in the GPU. do as much computation in the Model as possible. Instead leverage the GPU via matrix multiplication — basically calc `m * x` for every row of a matrix.
+
+Matrix multiplication is "the most important operation in deep learning"
+    - represented with `@`, i.e. `batch@weights + bias`
+
+Remember, gradients are a measure of how a loss function changes with small tweaks to the weights.
+
+`torch.where()` is equivalent to a list comprehension but runs on the GPU as a tensor.
+
+Our loss function:
+
+```python
+# measures the distance each pred is from 1 if it should 1, 
+# and the distance from 0 if it should be 0
+def mnist_loss(predictions, targets):
+    return torch.where(targets==1, 1-predictions, predictions).mean()
+```
+
+sigmoid function: ensures the inputs values are "smooshed" between 0 and 1. Provided by PyTorch.
+
+### SGD and mini-batches
+
+**review this section again**
+
+Instead of calculating the loss for each item in the dataset, we use _mini-batching_. This is a compromise. it saves time by calc'ing the avg loss for a few data items at a time. The number of items in a mini-batch is the _batch size_.
+
+The larger the batch size, the more accurate and stable the dataset's gradient. The cost is it will take longer.
+
+GPUs excel when they have a lot of work to do at a time, using mini batches is the best way to leverage this. Note: giving them too much data at once will result in an out of memory error.
+
+### Putting it all together
+
+The model training steps are going to roughyl look like:
+
+```python
+for x,y in dl:
+    pred = model(x)
+    loss = loss_func(pred, y)
+    loss.backward()
+    parameters -= parameters.grad * lr
+```
+
+Pytorch in place operations on objects are denoted with an ending `_`, i.e. `bias.zero_()`
+
+### Lesson 5
+
