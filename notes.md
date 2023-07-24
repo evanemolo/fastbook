@@ -14,6 +14,8 @@ See if you get a response to [this](https://forums.fast.ai/t/run-fast-ai-on-pape
 - [aiquizzes.com](https://aiquizzes.com)
 - [VSCode + Paperspace](https://forums.fast.ai/t/beginner-setup/95289/109?u=evanemolo)
 - [Fast.ai discord — course help](https://discord.com/channels/689892369998676007/999799504121376869)
+- [Course '22 GH repo](https://github.com/fastai/course22)
+    - clean dir is missing. use cleaned notebooks from [this PR](https://github.com/fastai/course22/pull/50/commits)
 
 ## Lesson 0
 
@@ -880,5 +882,81 @@ for x,y in dl:
 
 Pytorch in place operations on objects are denoted with an ending `_`, i.e. `bias.zero_()`
 
-### Lesson 5
+### Lesson 5 - creating a neural net from scratch
+
+Use this block in any Jupyter notebook that requires Kaggle:
+
+```python
+from dotenv import load_dotenv
+from pathlib import Path
+import json
+import os
+
+load_dotenv()
+
+kaggle_username = os.environ.get('KAGGLE_USERNAME')
+kaggle_token = os.environ.get('KAGGLE_TOKEN')
+
+creds = json.dumps({'username': kaggle_username, 'key': kaggle_token})
+
+cred_path = Path('~/.kaggle/kaggle.json').expanduser()
+
+cred_path.parent.mkdir(exist_ok=True)
+cred_path.write_text(creds)
+cred_path.chmod(0o600)
+```
+
+This goes through:
+    - linear model vs
+    - neural net vs
+    - deep learning
+from scratch
+
+Tabular data general requires more feature engineering for models.
+
+### Lesson 6 - Random Forests
+
+https://www.kaggle.com/code/jhoward/how-random-forests-really-work/
+  
+sklearn lib for non deep-learning ML approaches
+
+gini - how good is the split? scales from 0 to 1.
+
+for any tabular data, start with a decision tree to create baselines. "it's hard to mess up"
+
+random forest: generate many, many decision tree models at are unbiased. 
+    - grab a different random subset of data each time for a decision tree
+    - falls under "bagging"
+    - doing this creates our random forest!
+
+`sklearn` has a `RandomForestClassifier`    
+
+random forest almost always outperform a single decision tree
+
+feature importance plot...how important is a feature? 
+    you can plot this immediately...you can find the columns that will matter more than others.
+    
+Chapter 8 goes into this more deeply
+
+out of bag error:
+    - built into sklearn as well
+    
+partial dependence plot
+    -   
+    
+overfitting for a random forest is possible if there are few trees and the trees are deep
+    
+boosting (gradient boosting) vs bagging (random forest)
+    - boosting may be more accurate, but it's less resiliant to error than bagging
+
+https://www.kaggle.com/code/jhoward/first-steps-road-to-the-top-part-1
+
+look into fastkaggle library when you join a competition.
+
+"test time augmentation": `tta` provided by fastai lib.
+    expects augmentation to be used during training...
+    
+### Lesson 7 - collaborative filtering
+
+
 

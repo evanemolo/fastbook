@@ -12,3 +12,4 @@ __pycache__/
 .gradient
 .env
 one-off-notebooks/outputs/
+one-off-notebooks/titanic*
